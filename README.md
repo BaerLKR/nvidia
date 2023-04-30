@@ -9,5 +9,5 @@ Copyright (c) 2023 Lovis Rentsch. All Rights Reserved.
 ## Install
 
 ```
-git clone https://github.com/BaerLKR/nvidia.git && cd nvidia && cargo build --release && sudo mv target/release/nvidia /bin && cd .. & rm -rf nvidia/ && echo "Done <3"
+git clone https://github.com/BaerLKR/nvidia.git && cd nvidia && cargo build --release && sudo mv target/release/nvidia /bin && cd .. && rm -rf nvidia/ && echo "Done <3"
 ```

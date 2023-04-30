@@ -2,10 +2,35 @@ use std::process::Command;
 use colored::*;
 
 fn main() {
+    let a = nvidia::args();
+    match a {
+        Some(v) => {
+            let mut c = 0;
+            for arument in &v {
+                match arument.as_str() {
+                    "help" | "h" | "-h" | "--help" => {
+                        help()
+                    },
+                    _ => {
+                        c += 1;
+                    },
+                };
+                if c == v.len() {
+                    normal();
+                }
+            }
+        },
+        None => {
+            normal();
+        },
+    };
+}
+fn normal() {
     println!("{}", get_name().yellow());
     println!("{}", get_temp());
     println!("{}", get_last());
 }
+
 fn get_temp() -> String {
     let mut get = Command::new("sh");
     get.arg("-c");
@@ -50,4 +75,7 @@ fn get_last() -> String {
         }
     }
     res.trim().to_string()
+}
+fn help() {
+    println!("help");
 }

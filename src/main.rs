@@ -1,6 +1,8 @@
 use colored::*;
+use std::{thread, time};
 
 pub mod cmd;
+pub mod graph;
 
 fn main() {
     let a = nvidia::args();
@@ -27,10 +29,18 @@ fn main() {
     };
 }
 fn normal() {
-    println!("{}", cmd::get_name().yellow());
-    println!("{}", cmd::get_temp());
-    println!("{}", cmd::get_last());
+    loop {
+        clearscreen::clear().expect("Error cloearing the screen!");
+        println!("{}", cmd::get_name().yellow());
+        println!("{}", cmd::get_temp());
+        println!("{}", cmd::get_last());
+        let one_sec = time::Duration::from_secs(1);
+        thread::sleep(one_sec);
+    }
 }
+// fn graph(data: Vec<i32>) {
+
+// }
 fn help() {
     println!("help");
 }

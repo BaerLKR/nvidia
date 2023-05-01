@@ -1,5 +1,5 @@
 use colored::*;
-use std::{thread, time};
+use std::{thread, time, io::Write, slice::Iter};
 
 pub mod cmd;
 pub mod graph;
@@ -29,18 +29,40 @@ fn main() {
     };
 }
 fn normal() {
+    let mut ld: Vec<i32> = Vec::new();
+    let mut td: Vec<i32> = Vec::new();
     loop {
-        clearscreen::clear().expect("Error cloearing the screen!");
-        println!("{}", cmd::get_name().yellow());
-        println!("{}", cmd::get_temp());
-        println!("{}", cmd::get_last());
+        let name = cmd::get_name();
+        let temp = cmd::get_temp();
+        let auslast = cmd::get_last();
+        clearscreen::clear().expect("Error clearing screen.");
         let one_sec = time::Duration::from_secs(1);
+        {
+            let temp = temp.parse::<i32>().unwrap();
+            td.push(temp);
+        };
+        {
+            let mut auslast = auslast.chars();
+            auslast.next_back();
+            let laststring = String::from(auslast.as_str());
+            let lastzahl = laststring.trim().parse::<i32>().unwrap();
+            ld.push(lastzahl);
+        };
+        if ld.len() > 3 {
+            ld.remove(0);
+        }
+        if td.len() > 3 {
+            td.remove(0);
+        }
+        graph(&ld, &td, &name);
         thread::sleep(one_sec);
     }
 }
-// fn graph(data: Vec<i32>) {
-
-// }
+fn graph(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String) {
+    println!("Auslastung: {:?}", lastdata);
+    println!("Temperatur: {:?}", tempdata);
+    println!("Name: {name}");
+}
 fn help() {
     println!("help");
 }

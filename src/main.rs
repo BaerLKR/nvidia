@@ -59,34 +59,24 @@ fn normal() {
     }
 }
 fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String) {
+    println!("{}", name.bold().yellow());
+    println!("Utilization in %");
     graph(lastdata, 4);
     println!("");
     println!("");
+    println!("Temperature in °C");
     graph(tempdata, 4);
     
 }
 fn graph(data: &Vec<i32>, ratio: i32) {
     let mut lauf = 1;
     let data = data.to_owned();
-    // let mut l = 0;
-    // for item in &data {
-    //     if item.to_owned() > l {
-    //         l = item.to_owned();
-    //     }
-    // }
     let mut höhe = 0;
     termsize::get().map(|size| {
         höhe = size.rows as i32;
     });
-    // if max > höhe / 3 {
-    //     max = höhe / 3;
-    // } else if max > 10 {
-    //     max = max;
-    // } else {
-    //     max = 10;
-    // }
     let max = höhe / 3;
-    for zeile in (1..=max).rev() {
+    for zeile in (0..=max).rev() {
         lauf += 1;
         {
             let zeile = zeile * ratio;
@@ -106,19 +96,17 @@ fn help() {
     println!("help");
 }
 fn farbe(lauf: &i32) {
-    match lauf {
-        1 => print!("{}", "  ".on_red()),
-        10 => print!("{}", "  ".on_blue()),
-        11 => print!("{}", "  ".on_black()),
-        _ => print!("{}", "  ".on_green()),
-        // 0 => print!("{}", "  ".on_truecolor(244, 80, 0)),
-        // 1 => print!("{}", "  ".on_truecolor(221, 89, 1)),
-        // 2 => print!("{}", "  ".on_truecolor(198, 98, 2)),
-        // 3 => print!("{}", "  ".on_truecolor(176, 108, 3)),
-        // 4 => print!("{}", "  ".on_truecolor(130, 126, 6)),
-        // 5 => print!("{}", "  ".on_truecolor(107, 135, 7)),
-        // 6 => print!("{}", "  ".on_truecolor(85, 145, 8)),
-        // 7 => print!("{}", "  ".on_truecolor(62, 154, 9)),
-        // _ => print!("{}", "  ".on_truecolor(39, 163, 10)),
-    };
+    let r = farbgen(lauf)[0].try_into().unwrap();
+    let g = farbgen(lauf)[1].try_into().unwrap();
+    let b = farbgen(lauf)[2].try_into().unwrap();
+    print!("{}", "  ".on_truecolor(r, g, b));
+}
+fn farbgen(num: &i32) -> Vec<i32> {
+    let mut ausgangsfarbe = vec![235, 111, 146];
+    for _ in 0..num.to_owned() {
+        ausgangsfarbe[0] -= 10;
+        ausgangsfarbe[1] += 2;
+        ausgangsfarbe[2] -= 3;
+    }
+    ausgangsfarbe
 }

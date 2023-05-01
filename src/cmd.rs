@@ -33,6 +33,11 @@ pub fn get_memory_used() -> String {
     get.arg("-c").arg("nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits");
     format(get)
 }
+pub fn get_memory_used_percent() -> String {
+    let mut get = Command::new("sh");
+    get.arg("-c").arg("nvidia-smi --query-gpu=utilization.memory --format=csv,noheader,nounits");
+    format(get)
+}
 fn format(mut i: Command) -> String {
     let mut res = String::new();
     match i.output() {

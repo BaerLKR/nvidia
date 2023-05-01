@@ -37,6 +37,7 @@ fn normal() {
         let memused = cmd::get_memory_used();
         let temp = cmd::get_temp();
         let auslast = cmd::get_last();
+        let per = &cmd::get_memory_used_percent();
         clearscreen::clear().expect("Error clearing screen.");
         let one_sec = time::Duration::from_secs(1);
         {
@@ -61,11 +62,11 @@ fn normal() {
         if td.len() * 2 > (breite *3 / 4 - 3 ) as usize {
             td.remove(0);
         }
-        draw(&ld, &td, &name, &driver, &memtot, &memused, breite * 3 / 4);
+        draw(&ld, &td, &name, &driver, &memtot, &memused,per ,breite * 3 / 4);
         thread::sleep(one_sec);
     }
 }
-fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String, driver: &String, memtot: &String, memused: &String, len: i32) {
+fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String, driver: &String, memtot: &String, memused: &String, per: &String, len: i32) {
     print!("{}", name.bold().yellow());
     print!(" {}{}{}\n", "(".yellow(), driver.yellow(), ")".yellow());
     println!("");
@@ -80,14 +81,15 @@ fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String, driver: &String
     btmbar(len);
     println!("");
     println!("Memory usage:");
-    mem(memused, memtot)
+    mem(memused, memtot, per)
 }
-fn mem(used: &String, tot: &String) {
+fn mem(used: &String, tot: &String, per: &String) {
     let toti = tot.to_owned().trim().parse::<i32>().unwrap();
     let usedi = used.to_owned().trim().parse::<i32>().unwrap();
     let frac = toti / usedi * 3;
     let out = format!("{} MiB/{} MiB", used.to_owned(), tot.to_owned());
     farbe(&frac, out);
+    print!(" ({}%)", per);
     print!("\n");
 }
 fn topbar(title: String, len: i32) {

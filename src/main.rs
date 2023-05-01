@@ -1,8 +1,7 @@
 use colored::*;
-use std::{thread, time, io::Write, slice::Iter};
+use std::{thread, time};
 
 pub mod cmd;
-pub mod graph;
 
 fn main() {
     let a = nvidia::args();
@@ -32,6 +31,7 @@ fn normal() {
     let mut ld: Vec<i32> = Vec::new();
     let mut td: Vec<i32> = Vec::new();
     loop {
+        let driver = cmd::get_driver_version();
         let name = cmd::get_name();
         let temp = cmd::get_temp();
         let auslast = cmd::get_last();
@@ -54,32 +54,38 @@ fn normal() {
         if td.len() > 20 {
             td.remove(0);
         }
-        draw(&ld, &td, &name);
-        // btmbar();
+        let mut breite = 0;
+        termsize::get().map(|size| {
+            breite= size.cols as i32;
+        });
+
+        draw(&ld, &td, &name, &driver,breite);
         thread::sleep(one_sec);
     }
 }
-fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String) {
-    println!("{}", name.bold().yellow());
+fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String, driver: &String, len: i32) {
+    print!("{}", name.bold().yellow());
+    print!(" {}{}{}\n", "(".yellow(), driver.yellow(), ")".yellow());
+    println!("");
     let util = String::from("Utilization in %-");
-    topbar(util);
+    topbar(util, len);
     graph(lastdata, 5);
-    btmbar();
+    btmbar(len);
     println!("");
     println!("");
     let inc = String::from("Temperature in °C");
-    topbar(inc);
+    topbar(inc, len);
     graph(tempdata, 5);
-    btmbar();
+    btmbar(len);
 }
-fn topbar(title: String) {
+fn topbar(title: String, len: i32) {
     print!("+-{}", title);
     for _ in 0..29 {
         print!("-");
     }
     print!("+\n");
 }
-fn btmbar() {
+fn btmbar(len: i32) {
     print!("+");
     for _ in 0..48 {
         print!("-");
@@ -103,7 +109,7 @@ fn graph(data: &Vec<i32>, ratio: i32) {
         for _ in 0..(20 - data.len()) {
             print!("  ");
         }
-        for stelle in (0..data.len()).rev() {
+        for stelle in 0..data.len() {
             if data[stelle] >= zeile * ratio {
                 farbe(&lauf);
             } else {

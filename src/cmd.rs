@@ -44,4 +44,18 @@ pub fn get_last() -> String {
     }
     res.trim().to_string()
 }
-
+pub fn get_driver_version() -> String {
+    let mut get = Command::new("sh");
+    get.arg("-c");
+    get.arg("nvidia-smi --query-gpu=driver_version --format=csv,noheader");
+    let mut res = String::new();
+    match get.output() {
+        Ok(o) => {
+            res = String::from_utf8(o.stdout).expect("error translating");  
+        },
+        Err(e) => {
+            println!("{e}");
+        },
+    }
+    res.trim().to_string()
+}

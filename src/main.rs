@@ -62,13 +62,6 @@ fn normal() {
             print!("{}", "ja".red());
             td.remove(0);
         }
-        // if ld.len() > 3 {
-        //     ld.remove(0);
-        // }
-        // if td.len() > 3 {
-        //     print!("{}", "ja".red());
-        //     td.remove(0);
-        // }
         draw(&ld, &td, &name, &driver, &memtot, &memused, breite * 3 / 4);
         thread::sleep(one_sec);
     }
@@ -86,16 +79,19 @@ fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String, driver: &String
     topbar(inc, len);
     graph(tempdata, 5, len);
     btmbar(len);
+    println!("");
+    println!("Memory usage:");
     mem(memused, memtot)
 }
 fn mem(used: &String, tot: &String) {
     let frac = {
-        let used = used.to_owned().trim().parse::<i32>().unwrap();
-        used / 50
+        // let used = used.to_owned().trim().parse::<i32>().unwrap();
+        // let tot = tot.to_owned().trim().parse::<i32>().unwrap();
+        // tot / used
+        4000/1000  * 3
     };
-    let out = format!("{}/{}", used.to_owned(), tot.to_owned());
+    let out = format!("{} MiB/{} MiB", used.to_owned(), tot.to_owned());
     farbe(&frac, out);
-    // print!("{}/{}", used.to_owned(), tot.to_owned());
     print!("\n");
 }
 fn topbar(title: String, len: i32) {

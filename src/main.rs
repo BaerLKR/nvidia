@@ -54,15 +54,52 @@ fn normal() {
         if td.len() > 3 {
             td.remove(0);
         }
-        graph(&ld, &td, &name);
+        draw(&ld, &td, &name);
         thread::sleep(one_sec);
     }
 }
-fn graph(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String) {
-    println!("Auslastung: {:?}", lastdata);
-    println!("Temperatur: {:?}", tempdata);
-    println!("Name: {name}");
+fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String) {
+    // println!("Auslastung: {:?}", lastdata);
+    // println!("Temperatur: {:?}", tempdata);
+    // println!("Name: {name}");
+    graph(lastdata);
+}
+fn graph(data: &Vec<i32>) {
+    let mut lauf = 1;
+    let data = data.to_owned();
+    let mut max = 0;
+    for item in &data {
+        if item.to_owned() > max {
+            max = item.to_owned();
+        }
+    }
+    for zeile in (1..=max).rev() {
+        lauf += 1;
+        print!("{zeile:>2}");
+        for stelle in 0..data.len() {
+            if data[stelle] >= zeile {
+                farbe(&lauf);
+            } else {
+                print!("  ");
+            }
+        }
+        print!("\n");
+    }
 }
 fn help() {
     println!("help");
+}
+fn farbe(lauf: &i32) {
+    match lauf {
+        1 => print!("{}", "  ".on_truecolor(39, 163, 10)),
+        2 => print!("{}", "  ".on_truecolor(62, 154, 9)),
+        3 => print!("{}", "  ".on_truecolor(85, 145, 8)),
+        4 => print!("{}", "  ".on_truecolor(107, 135, 7)),
+        5 => print!("{}", "  ".on_truecolor(130, 126, 6)),
+        6 => print!("{}", "  ".on_truecolor(153, 117, 4)),
+        7 => print!("{}", "  ".on_truecolor(176, 108, 3)),
+        8 => print!("{}", "  ".on_truecolor(198, 98, 2)),
+        9 => print!("{}", "  ".on_truecolor(221, 89, 1)),
+        _ => print!("{}", "  ".on_truecolor(244, 80, 0)),
+    };
 }

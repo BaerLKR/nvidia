@@ -1,4 +1,4 @@
-use std::{process::Command};
+use std::process::Command;
 pub fn get_temp() -> String {
     let mut get = Command::new("sh");
     get.arg("-c");
@@ -25,12 +25,12 @@ pub fn get_driver_version() -> String {
 }
 pub fn get_memory_total() -> String {
     let mut get = Command::new("sh");
-    get.arg("-c").arg("nvidia-smi --query-gpu=memory.total --format=csv,noheader");
+    get.arg("-c").arg("nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits");
     format(get)
 }
 pub fn get_memory_used() -> String {
     let mut get = Command::new("sh");
-    get.arg("-c").arg("nvidia-smi --query-gpu=memory.used --format=csv,noheader");
+    get.arg("-c").arg("nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits");
     format(get)
 }
 fn format(mut i: Command) -> String {

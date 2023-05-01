@@ -54,13 +54,14 @@ fn normal() {
         termsize::get().map(|size| {
             breite= size.cols as i32;
         });
-        if ld.len() > breite as usize - 10 {
+        if ld.len() > breite as usize * 3 / 4 - 5  {
             ld.remove(0);
         }
-        if td.len() > breite as usize - 10 {
+        if td.len() > breite as usize * 3 / 4 - 5 {
+            print!("{}", "ja".red());
             td.remove(0);
         }
-        draw(&ld, &td, &name, &driver, &memtot, &memused, breite - 10);
+        draw(&ld, &td, &name, &driver, &memtot, &memused, breite * 3 / 4);
         thread::sleep(one_sec);
     }
 }
@@ -77,7 +78,17 @@ fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String, driver: &String
     topbar(inc, len);
     graph(tempdata, 5, len);
     btmbar(len);
-    println!("{}/{}", memused, memtot);
+    mem(memused, memtot)
+}
+fn mem(used: &String, tot: &String) {
+    let frac = {
+        let used = used.to_owned().trim().parse::<i32>().unwrap();
+        used / 50
+    };
+    let out = format!("{}/{}", used.to_owned(), tot.to_owned());
+    farbe(&frac, out);
+    // print!("{}/{}", used.to_owned(), tot.to_owned());
+    print!("\n");
 }
 fn topbar(title: String, len: i32) {
     print!("+-{}", title);
@@ -112,7 +123,7 @@ fn graph(data: &Vec<i32>, ratio: i32, breite: i32) {
         }
         for stelle in 0..data.len() {
             if data[stelle] >= zeile * ratio {
-                farbe(&lauf);
+                farbe(&lauf, String::from("  "));
             } else {
                 print!("  ");
             }
@@ -123,11 +134,11 @@ fn graph(data: &Vec<i32>, ratio: i32, breite: i32) {
 fn help() {
     println!("help");
 }
-fn farbe(lauf: &i32) {
+fn farbe(lauf: &i32, c: String) {
     let r = farbgen(lauf)[0].try_into().unwrap();
     let g = farbgen(lauf)[1].try_into().unwrap();
     let b = farbgen(lauf)[2].try_into().unwrap();
-    print!("{}", "  ".on_truecolor(r, g, b));
+    print!("{}", c.on_truecolor(r, g, b));
 }
 fn farbgen(num: &i32) -> Vec<i32> {
     let mut ausgangsfarbe = vec![235, 111, 146];

@@ -84,14 +84,12 @@ fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String, driver: &String
     mem(memused, memtot)
 }
 fn mem(used: &String, tot: &String) {
-    let frac = {
-        // let used = used.to_owned().trim().parse::<i32>().unwrap();
-        // let tot = tot.to_owned().trim().parse::<i32>().unwrap();
-        // tot / used
-        4000/1000  * 3
-    };
+    let toti = tot.to_owned().trim().parse::<i32>().unwrap();
+    let usedi = used.to_owned().trim().parse::<i32>().unwrap();
+    let frac = toti / usedi * 3;
     let out = format!("{} MiB/{} MiB", used.to_owned(), tot.to_owned());
     farbe(&frac, out);
+    print!(" ({}%)", usedi / toti + 1);
     print!("\n");
 }
 fn topbar(title: String, len: i32) {

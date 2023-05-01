@@ -59,15 +59,13 @@ fn normal() {
     }
 }
 fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String) {
-    // println!("Auslastung: {:?}", lastdata);
-    // println!("Temperatur: {:?}", tempdata);
-    // println!("Name: {name}");
-    graph(lastdata);
-    // println!("");
-    // println!("");
-    // graph(tempdata);
+    graph(lastdata, 1);
+    println!("");
+    println!("");
+    graph(tempdata, 3);
+    
 }
-fn graph(data: &Vec<i32>) {
+fn graph(data: &Vec<i32>, ratio: i32) {
     let mut lauf = 1;
     let data = data.to_owned();
     let mut max = 0;
@@ -89,9 +87,12 @@ fn graph(data: &Vec<i32>) {
     }
     for zeile in (1..=max).rev() {
         lauf += 1;
-        print!("{zeile:>2}");
+        {
+            let zeile = zeile * ratio;
+            print!("{zeile:>2}");
+        }
         for stelle in 0..data.len() {
-            if data[stelle] >= zeile {
+            if data[stelle] >= zeile * ratio {
                 farbe(&lauf);
             } else {
                 print!("  ");

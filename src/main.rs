@@ -59,7 +59,6 @@ fn normal() {
             ld.remove(0);
         }
         if td.len() * 2 > (breite *3 / 4 - 3 ) as usize {
-            print!("{}", "ja".red());
             td.remove(0);
         }
         draw(&ld, &td, &name, &driver, &memtot, &memused, breite * 3 / 4);
@@ -89,7 +88,6 @@ fn mem(used: &String, tot: &String) {
     let frac = toti / usedi * 3;
     let out = format!("{} MiB/{} MiB", used.to_owned(), tot.to_owned());
     farbe(&frac, out);
-    print!(" ({}%)", usedi / toti + 1);
     print!("\n");
 }
 fn topbar(title: String, len: i32) {

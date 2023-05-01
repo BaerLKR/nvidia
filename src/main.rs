@@ -48,7 +48,7 @@ fn normal() {
             let lastzahl = laststring.trim().parse::<i32>().unwrap();
             ld.push(lastzahl);
         };
-        if ld.len() > 3 {
+        if ld.len() > 10 {
             ld.remove(0);
         }
         if td.len() > 3 {
@@ -63,6 +63,9 @@ fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String) {
     // println!("Temperatur: {:?}", tempdata);
     // println!("Name: {name}");
     graph(lastdata);
+    // println!("");
+    // println!("");
+    // graph(tempdata);
 }
 fn graph(data: &Vec<i32>) {
     let mut lauf = 1;
@@ -72,6 +75,17 @@ fn graph(data: &Vec<i32>) {
         if item.to_owned() > max {
             max = item.to_owned();
         }
+    }
+    let mut höhe = 0;
+    termsize::get().map(|size| {
+        höhe = size.rows as i32;
+    });
+    if max > höhe / 3 {
+        max = höhe / 3;
+    } else if max > 10 {
+        max = max;
+    } else {
+        max = 10;
     }
     for zeile in (1..=max).rev() {
         lauf += 1;

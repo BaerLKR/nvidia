@@ -48,25 +48,43 @@ fn normal() {
             let lastzahl = laststring.trim().parse::<i32>().unwrap();
             ld.push(lastzahl);
         };
-        if ld.len() > 10 {
+        if ld.len() > 20 {
             ld.remove(0);
         }
-        if td.len() > 10 {
+        if td.len() > 20 {
             td.remove(0);
         }
         draw(&ld, &td, &name);
+        // btmbar();
         thread::sleep(one_sec);
     }
 }
 fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String) {
     println!("{}", name.bold().yellow());
-    println!("Utilization in %");
-    graph(lastdata, 4);
+    let util = String::from("Utilization in %-");
+    topbar(util);
+    graph(lastdata, 5);
+    btmbar();
     println!("");
     println!("");
-    println!("Temperature in °C");
-    graph(tempdata, 4);
-    
+    let inc = String::from("Temperature in °C");
+    topbar(inc);
+    graph(tempdata, 5);
+    btmbar();
+}
+fn topbar(title: String) {
+    print!("+-{}", title);
+    for _ in 0..29 {
+        print!("-");
+    }
+    print!("+\n");
+}
+fn btmbar() {
+    print!("+");
+    for _ in 0..48 {
+        print!("-");
+    }
+    print!("+\n");
 }
 fn graph(data: &Vec<i32>, ratio: i32) {
     let mut lauf = 1;
@@ -80,16 +98,19 @@ fn graph(data: &Vec<i32>, ratio: i32) {
         lauf += 1;
         {
             let zeile = zeile * ratio;
-            print!("{zeile:>2}");
+            print!("| {:>3} | ", zeile.to_string().blue());
         }
-        for stelle in 0..data.len() {
+        for _ in 0..(20 - data.len()) {
+            print!("  ");
+        }
+        for stelle in (0..data.len()).rev() {
             if data[stelle] >= zeile * ratio {
                 farbe(&lauf);
             } else {
                 print!("  ");
             }
         }
-        print!("\n");
+        print!(" |\n");
     }
 }
 fn help() {

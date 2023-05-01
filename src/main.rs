@@ -51,7 +51,7 @@ fn normal() {
         if ld.len() > 10 {
             ld.remove(0);
         }
-        if td.len() > 3 {
+        if td.len() > 10 {
             td.remove(0);
         }
         draw(&ld, &td, &name);
@@ -59,32 +59,33 @@ fn normal() {
     }
 }
 fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String) {
-    graph(lastdata, 1);
+    graph(lastdata, 4);
     println!("");
     println!("");
-    graph(tempdata, 3);
+    graph(tempdata, 4);
     
 }
 fn graph(data: &Vec<i32>, ratio: i32) {
     let mut lauf = 1;
     let data = data.to_owned();
-    let mut max = 0;
-    for item in &data {
-        if item.to_owned() > max {
-            max = item.to_owned();
-        }
-    }
+    // let mut l = 0;
+    // for item in &data {
+    //     if item.to_owned() > l {
+    //         l = item.to_owned();
+    //     }
+    // }
     let mut höhe = 0;
     termsize::get().map(|size| {
         höhe = size.rows as i32;
     });
-    if max > höhe / 3 {
-        max = höhe / 3;
-    } else if max > 10 {
-        max = max;
-    } else {
-        max = 10;
-    }
+    // if max > höhe / 3 {
+    //     max = höhe / 3;
+    // } else if max > 10 {
+    //     max = max;
+    // } else {
+    //     max = 10;
+    // }
+    let max = höhe / 3;
     for zeile in (1..=max).rev() {
         lauf += 1;
         {
@@ -106,15 +107,18 @@ fn help() {
 }
 fn farbe(lauf: &i32) {
     match lauf {
-        1 => print!("{}", "  ".on_truecolor(39, 163, 10)),
-        2 => print!("{}", "  ".on_truecolor(62, 154, 9)),
-        3 => print!("{}", "  ".on_truecolor(85, 145, 8)),
-        4 => print!("{}", "  ".on_truecolor(107, 135, 7)),
-        5 => print!("{}", "  ".on_truecolor(130, 126, 6)),
-        6 => print!("{}", "  ".on_truecolor(153, 117, 4)),
-        7 => print!("{}", "  ".on_truecolor(176, 108, 3)),
-        8 => print!("{}", "  ".on_truecolor(198, 98, 2)),
-        9 => print!("{}", "  ".on_truecolor(221, 89, 1)),
-        _ => print!("{}", "  ".on_truecolor(244, 80, 0)),
+        1 => print!("{}", "  ".on_red()),
+        10 => print!("{}", "  ".on_blue()),
+        11 => print!("{}", "  ".on_black()),
+        _ => print!("{}", "  ".on_green()),
+        // 0 => print!("{}", "  ".on_truecolor(244, 80, 0)),
+        // 1 => print!("{}", "  ".on_truecolor(221, 89, 1)),
+        // 2 => print!("{}", "  ".on_truecolor(198, 98, 2)),
+        // 3 => print!("{}", "  ".on_truecolor(176, 108, 3)),
+        // 4 => print!("{}", "  ".on_truecolor(130, 126, 6)),
+        // 5 => print!("{}", "  ".on_truecolor(107, 135, 7)),
+        // 6 => print!("{}", "  ".on_truecolor(85, 145, 8)),
+        // 7 => print!("{}", "  ".on_truecolor(62, 154, 9)),
+        // _ => print!("{}", "  ".on_truecolor(39, 163, 10)),
     };
 }

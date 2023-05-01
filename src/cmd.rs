@@ -23,6 +23,16 @@ pub fn get_driver_version() -> String {
     get.arg("nvidia-smi --query-gpu=driver_version --format=csv,noheader");
     format(get)
 }
+pub fn get_memory_total() -> String {
+    let mut get = Command::new("sh");
+    get.arg("-c").arg("nvidia-smi --query-gpu=memory.total --format=csv,noheader");
+    format(get)
+}
+pub fn get_memory_used() -> String {
+    let mut get = Command::new("sh");
+    get.arg("-c").arg("nvidia-smi --query-gpu=memory.used --format=csv,noheader");
+    format(get)
+}
 fn format(mut i: Command) -> String {
     let mut res = String::new();
     match i.output() {

@@ -30,9 +30,11 @@ fn main() {
 fn normal() {
     let mut ld: Vec<i32> = Vec::new();
     let mut td: Vec<i32> = Vec::new();
+    let name = cmd::get_name();
+    let driver = cmd::get_driver_version();
+    let memtot = cmd::get_memory_total();
     loop {
-        let driver = cmd::get_driver_version();
-        let name = cmd::get_name();
+        let memused = cmd::get_memory_used();
         let temp = cmd::get_temp();
         let auslast = cmd::get_last();
         clearscreen::clear().expect("Error clearing screen.");
@@ -48,51 +50,50 @@ fn normal() {
             let lastzahl = laststring.trim().parse::<i32>().unwrap();
             ld.push(lastzahl);
         };
-        if ld.len() > 20 {
-            ld.remove(0);
-        }
-        if td.len() > 20 {
-            td.remove(0);
-        }
         let mut breite = 0;
         termsize::get().map(|size| {
             breite= size.cols as i32;
         });
-
-        draw(&ld, &td, &name, &driver,breite);
+        if ld.len() > breite as usize - 10 {
+            ld.remove(0);
+        }
+        if td.len() > breite as usize - 10 {
+            td.remove(0);
+        }
+        draw(&ld, &td, &name, &driver, &memtot, &memused, breite - 10);
         thread::sleep(one_sec);
     }
 }
-fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String, driver: &String, len: i32) {
+fn draw(lastdata: &Vec<i32>, tempdata: &Vec<i32>, name: &String, driver: &String, memtot: &String, memused: &String, len: i32) {
     print!("{}", name.bold().yellow());
     print!(" {}{}{}\n", "(".yellow(), driver.yellow(), ")".yellow());
     println!("");
     let util = String::from("Utilization in %-");
     topbar(util, len);
-    graph(lastdata, 5);
+    graph(lastdata, 5, len);
     btmbar(len);
-    println!("");
     println!("");
     let inc = String::from("Temperature in °C");
     topbar(inc, len);
-    graph(tempdata, 5);
+    graph(tempdata, 5, len);
     btmbar(len);
+    println!("{}/{}", memused, memtot);
 }
 fn topbar(title: String, len: i32) {
     print!("+-{}", title);
-    for _ in 0..29 {
+    for _ in 0..len - 11 {
         print!("-");
     }
     print!("+\n");
 }
 fn btmbar(len: i32) {
     print!("+");
-    for _ in 0..48 {
+    for _ in 0..len + 7 {
         print!("-");
     }
     print!("+\n");
 }
-fn graph(data: &Vec<i32>, ratio: i32) {
+fn graph(data: &Vec<i32>, ratio: i32, breite: i32) {
     let mut lauf = 1;
     let data = data.to_owned();
     let mut höhe = 0;
@@ -106,7 +107,7 @@ fn graph(data: &Vec<i32>, ratio: i32) {
             let zeile = zeile * ratio;
             print!("| {:>3} | ", zeile.to_string().blue());
         }
-        for _ in 0..(20 - data.len()) {
+        for _ in 0..(breite / 2 - data.len() as i32) {
             print!("  ");
         }
         for stelle in 0..data.len() {

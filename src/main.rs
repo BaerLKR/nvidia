@@ -50,17 +50,25 @@ fn normal() {
             let lastzahl = laststring.trim().parse::<i32>().unwrap();
             ld.push(lastzahl);
         };
+
         let mut breite = 0;
         termsize::get().map(|size| {
             breite= size.cols as i32;
         });
-        if ld.len() > breite as usize * 3 / 4 - 5  {
+        if ld.len() *  2> (breite * 3 / 4 - 3) as usize {
             ld.remove(0);
         }
-        if td.len() > breite as usize * 3 / 4 - 5 {
+        if td.len() * 2 > (breite *3 / 4 - 3 ) as usize {
             print!("{}", "ja".red());
             td.remove(0);
         }
+        // if ld.len() > 3 {
+        //     ld.remove(0);
+        // }
+        // if td.len() > 3 {
+        //     print!("{}", "ja".red());
+        //     td.remove(0);
+        // }
         draw(&ld, &td, &name, &driver, &memtot, &memused, breite * 3 / 4);
         thread::sleep(one_sec);
     }

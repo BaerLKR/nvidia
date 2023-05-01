@@ -134,7 +134,9 @@ fn graph(data: &Vec<i32>, ratio: i32, breite: i32) {
     }
 }
 fn help() {
-    println!("help");
+    println!("{}","This is a wrapper for the nvidia-smi comman, provided by the nvidia drivers on linux.".green());
+    println!("{}","The program will display the head, the usage ans the memory used.".green());
+    println!("{}{}{}{}","the coding for this project was done ".green(), "by me, for fun, in rust".green().bold(), " and under the ".green(), "EUPL.".green().bold());
 }
 fn farbe(lauf: &i32, c: String) {
     let r = farbgen(lauf)[0].try_into().unwrap();

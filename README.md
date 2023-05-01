@@ -8,6 +8,8 @@ Licensed under the EUPL.
 
 Copyright (c) 2023 Lovis Rentsch. All Rights Reserved.
 
+Feedback welcome!
+
 ## Install
 
 ```
